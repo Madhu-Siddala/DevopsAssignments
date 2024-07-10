@@ -1,0 +1,67 @@
+1.Create Nginx dockerfile Set the base image to Ubuntu,Set the base image to Ubuntu,Install Nginx,Install necessary tools: vim wget curl net-tools,Remove the default Nginx configuration file,Copy a configuration file from the current directory,Expose ports (80),Set the default command to execute when creating a new container
+
+FROM ubuntu
+RUN sudo apt install nginx -y
+RUN sudo apt install curl wget net-tools
+RUN sudo rm -rf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["echo", "Hello, Docker!"]
+
+
+2.Build the docker image and push it to dockerhub.
+
+step 1:Build image with docker hub username/image_name and also specify Dockerfile path while building
+docker build -t immadhu/myimage:1.0 -f Dockerfile .
+
+step 2:docker login in the terminal by providing necessary username and password and push to docker hub
+docker push immadhu/myimage:1.0
+
+
+3.What is the difference between 'RUN', 'CMD', & 'ENTRYPOINT' in dockerfile?
+
+RUN is used to execute described steps  to run the after container is  up
+example: Run apt install wget httpd
+
+CMD is used to give commands . The commands which are placed inside the CMD will execute automatically when container is up
+example: CMD["echo" "hello"]
+
+ENTRYPOINT is also used to run commands with which takes arguments run time if not given at build time then its takes the CMD as arguments. It has higher priority than CMD. when we use both in dockerfile then it take CMD as arguments to ENTRYPOINT.
+CMD["Madhu"]
+ENTRYPOINT ["echo"]
+
+4.How to remove container automatically after it exits?
+
+docker run --rm -d -P ubuntu
+
+5.How to check which containers are connected to a network?
+
+docker network ls
+docker network inspect network_name 
+
+
+6.How to check container ip address?
+
+docker inspect container_name
+
+7.How to create custom bridge network?
+
+docker network create --driver bridge myNetwork
+
+8.How to associate a container with a network?
+
+docker run -d --name my_container --network myNetwork nginx
+
+
+9.How to get persistent storage?
+
+we use volumes and bind mounts ;
+volumes:
+docker create volume myvolume 
+docker run --name container_name -P -v myvolume:/data
+
+Bind Mounts: we can sync any directory with container.
+docker run --name container_name -P -v /home/rps/data:/data
+
+
+
